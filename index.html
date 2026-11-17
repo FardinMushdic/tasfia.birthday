@@ -1,0 +1,2395 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tasfia — The Vintage Birthday Diary</title>
+    <meta
+      name="description"
+      content="An antique vintage birthday diary crafted for Tasfia — seven pages of warm wishes, reflections, and a secret keepsake envelope."
+    />
+    <meta property="og:title" content="Tasfia — The Vintage Birthday Diary" />
+    <meta
+      property="og:description"
+      content="An antique vintage birthday diary crafted for Tasfia."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Vintage editorial, handwritten, and Bengali literary fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Lora:ital,wght@0,400;0,500;1,400&family=Noto+Serif+Bengali:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* =====================================================================
+         1. DESIGN TOKENS & PALETTE
+         ===================================================================== */
+      :root {
+        --bg-dark: #21150f;
+        --bg-coffee: #3b281b;
+        --parchment-light: #e8d5ae;
+        --aged-paper: #d8bd8d;
+        --sepia: #96744c;
+        --dark-ink: #38271c;
+        --burnt-edge: #4a2919;
+        --gold-foil: #d8b46c;
+        --gold-muted: #b68d4c;
+        --wax-crimson: #7d251b;
+        --wax-highlight: #a83c2d;
+        --wax-shadow: #42100a;
+
+        --font-heading: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+        --font-hand: 'Caveat', 'Segoe Script', 'Bradley Hand', cursive;
+        --font-body: 'Lora', 'Noto Serif Bengali', 'SolaimanLipi', 'Kalpurush', Georgia, serif;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        min-height: 100vh;
+        min-height: 100dvh;
+        background-color: var(--bg-dark);
+        background-image:
+          radial-gradient(ellipse 80% 65% at 50% 42%, rgba(86, 52, 31, 0.56) 0%, rgba(33, 21, 15, 0.92) 60%, #140b07 100%),
+          repeating-linear-gradient(
+            90deg,
+            rgba(232, 213, 174, 0.014) 0px,
+            rgba(232, 213, 174, 0.014) 1px,
+            transparent 1px,
+            transparent 30px
+          );
+        color: var(--dark-ink);
+        font-family: var(--font-body);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: clamp(1rem, 3.5vw, 2.75rem) clamp(0.75rem, 3vw, 1.75rem);
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* =====================================================================
+         2. AMBIENT CANDLELIGHT & CANVAS PARTICLES
+         ===================================================================== */
+      .candlelight-glow {
+        position: fixed;
+        inset: -12%;
+        pointer-events: none;
+        z-index: 0;
+        background:
+          radial-gradient(
+            circle 54vmax at 66% 24%,
+            rgba(255, 192, 104, 0.16) 0%,
+            rgba(214, 128, 48, 0.07) 40%,
+            transparent 72%
+          ),
+          radial-gradient(
+            circle 46vmax at 30% 78%,
+            rgba(182, 102, 38, 0.1) 0%,
+            transparent 68%
+          );
+        animation: candleFlicker 7.2s ease-in-out infinite alternate;
+        will-change: opacity, transform;
+      }
+
+      @keyframes candleFlicker {
+        0% {
+          opacity: 0.78;
+          transform: scale(1) translate3d(0, 0, 0);
+        }
+        38% {
+          opacity: 0.96;
+          transform: scale(1.02) translate3d(-4px, 3px, 0);
+        }
+        72% {
+          opacity: 0.85;
+          transform: scale(0.99) translate3d(3px, -2px, 0);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1.03) translate3d(-2px, -3px, 0);
+        }
+      }
+
+      #atmosphere-canvas {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      /* =====================================================================
+         3. DIARY STAGE, 3D PERSPECTIVE & PAGE VISIBILITY
+         ===================================================================== */
+      .diary-shell {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 780px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: clamp(1.1rem, 2.5vw, 1.65rem);
+        animation: stageEnter 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      @keyframes stageEnter {
+        from {
+          opacity: 0;
+          transform: translate3d(0, 14px, 0) scale(0.992);
+        }
+        to {
+          opacity: 1;
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+      }
+
+      .diary-viewport {
+        width: 100%;
+        position: relative;
+        perspective: 1800px;
+        perspective-origin: 50% 45%;
+      }
+
+      .diary-viewport::before {
+        content: '';
+        position: absolute;
+        inset: -20px;
+        z-index: -1;
+        border-radius: 28px;
+        background: radial-gradient(
+          ellipse at 56% 42%,
+          rgba(255, 184, 92, 0.2) 0%,
+          rgba(196, 108, 36, 0.09) 48%,
+          transparent 75%
+        );
+        filter: blur(22px);
+        pointer-events: none;
+      }
+
+      .diary-page {
+        display: none;
+        position: relative;
+        width: 100%;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+      }
+
+      .diary-page.is-active {
+        display: block;
+      }
+
+      .diary-page.turn-out-next {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 6;
+        transform-origin: left center;
+        animation: turnOutNext 540ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        pointer-events: none;
+      }
+
+      .diary-page.turn-in-next {
+        display: block;
+        z-index: 4;
+        transform-origin: left center;
+        animation: turnInNext 540ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      .diary-page.turn-out-prev {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 6;
+        transform-origin: left center;
+        animation: turnOutPrev 520ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        pointer-events: none;
+      }
+
+      .diary-page.turn-in-prev {
+        display: block;
+        z-index: 4;
+        transform-origin: left center;
+        animation: turnInPrev 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      @keyframes turnOutNext {
+        0% {
+          opacity: 1;
+          transform: rotateY(0deg) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: rotateY(-58deg) translateX(-18px) scale(0.96);
+        }
+      }
+
+      @keyframes turnInNext {
+        0% {
+          opacity: 0;
+          transform: rotateY(22deg) translateX(16px) scale(0.985);
+        }
+        100% {
+          opacity: 1;
+          transform: rotateY(0deg) translateX(0) scale(1);
+        }
+      }
+
+      @keyframes turnOutPrev {
+        0% {
+          opacity: 1;
+          transform: rotateY(0deg) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: rotateY(32deg) translateX(18px) scale(0.97);
+        }
+      }
+
+      @keyframes turnInPrev {
+        0% {
+          opacity: 0;
+          transform: rotateY(-38deg) translateX(-16px) scale(0.98);
+        }
+        100% {
+          opacity: 1;
+          transform: rotateY(0deg) translateX(0) scale(1);
+        }
+      }
+
+      /* =====================================================================
+         4. PAGE 01 — CLOSED ANTIQUE LEATHER DIARY
+         ===================================================================== */
+      .leather-book {
+        position: relative;
+        max-width: 600px;
+        margin: 0 auto;
+        perspective: 1800px;
+      }
+
+      .leather-cover {
+        position: relative;
+        border-radius: 8px 18px 18px 8px;
+        background:
+          radial-gradient(circle at 72% 24%, rgba(255, 192, 108, 0.14) 0%, transparent 45%),
+          radial-gradient(circle at 24% 80%, rgba(18, 9, 4, 0.55) 0%, transparent 55%),
+          linear-gradient(145deg, #4b3121 0%, #3b281b 38%, #2b1b11 78%, #1e120b 100%);
+        padding: clamp(2.5rem, 6vw, 4rem) clamp(1.75rem, 5vw, 3.5rem) clamp(2.5rem, 5vw, 3.75rem) clamp(2.4rem, 6vw, 4.25rem);
+        box-shadow:
+          inset 0 1px 0 rgba(232, 213, 174, 0.22),
+          inset 0 -3px 12px rgba(0, 0, 0, 0.55),
+          inset 18px 0 28px rgba(0, 0, 0, 0.55),
+          0 28px 56px rgba(0, 0, 0, 0.78),
+          0 10px 22px rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(182, 141, 76, 0.3);
+        transform-origin: left center;
+        transition: transform 0.78s cubic-bezier(0.32, 0.08, 0.24, 1), opacity 0.6s ease;
+        overflow: hidden;
+      }
+
+      .leather-cover.is-opening {
+        transform: rotateY(-108deg) scale(0.97);
+        opacity: 0;
+      }
+
+      .leather-spine {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: clamp(22px, 4vw, 34px);
+        background: linear-gradient(
+          90deg,
+          #160d08 0%,
+          #3c2619 35%,
+          #28180e 70%,
+          #150b06 100%
+        );
+        border-right: 1px solid rgba(182, 141, 76, 0.24);
+        box-shadow: inset -3px 0 8px rgba(0, 0, 0, 0.6);
+        pointer-events: none;
+      }
+
+      .leather-spine::before,
+      .leather-spine::after {
+        content: '';
+        position: absolute;
+        left: 2px;
+        right: 2px;
+        height: 8px;
+        border-radius: 3px;
+        background: linear-gradient(180deg, rgba(216, 180, 108, 0.22), rgba(20, 10, 5, 0.7));
+      }
+
+      .leather-spine::before {
+        top: 22%;
+      }
+
+      .leather-spine::after {
+        bottom: 22%;
+      }
+
+      .leather-stitch-frame {
+        position: absolute;
+        inset: 14px 14px 14px clamp(30px, 5vw, 44px);
+        border: 1px dashed rgba(216, 180, 108, 0.34);
+        border-radius: 4px 12px 12px 4px;
+        pointer-events: none;
+      }
+
+      .brass-corner {
+        position: absolute;
+        width: 34px;
+        height: 34px;
+        color: rgba(216, 180, 108, 0.65);
+        pointer-events: none;
+      }
+      .brass-corner--tr {
+        top: 10px;
+        right: 10px;
+      }
+      .brass-corner--br {
+        bottom: 10px;
+        right: 10px;
+        transform: rotate(90deg);
+      }
+
+      .cover-inner {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.15rem;
+      }
+
+      .cover-botanical {
+        width: 112px;
+        height: auto;
+        color: rgba(216, 180, 108, 0.78);
+      }
+
+      .cover-title {
+        font-family: var(--font-heading);
+        font-size: clamp(1.9rem, 4.6vw, 2.75rem);
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        line-height: 1.15;
+        color: #f3dfb6;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.75);
+        text-wrap: balance;
+      }
+
+      .cover-subtitle {
+        font-family: var(--font-hand);
+        font-size: clamp(1.35rem, 3.2vw, 1.75rem);
+        font-weight: 600;
+        color: #dfc18a;
+        line-height: 1.3;
+      }
+
+      .cover-divider {
+        width: min(100%, 220px);
+        color: rgba(216, 180, 108, 0.62);
+      }
+
+      .cover-description {
+        font-family: var(--font-body);
+        font-size: clamp(14.75px, 1.8vw, 16.5px);
+        line-height: 1.85;
+        color: #e8d5ae;
+        max-width: 44ch;
+        white-space: pre-line;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65);
+      }
+
+      .cover-seal-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 0.25rem;
+      }
+
+      .wax-seal-svg {
+        width: 56px;
+        height: 56px;
+        filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.65));
+      }
+
+      .btn-open-diary {
+        margin-top: 0.45rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55rem;
+        min-height: 46px;
+        padding: 0.75rem 1.75rem;
+        border-radius: 6px;
+        border: 1px solid rgba(232, 213, 174, 0.55);
+        background: linear-gradient(180deg, #ecd8af 0%, #d4b47e 100%);
+        color: #2b180e;
+        font-family: var(--font-heading);
+        font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        cursor: pointer;
+        box-shadow:
+          0 6px 18px rgba(0, 0, 0, 0.55),
+          inset 0 1px 0 rgba(255, 250, 236, 0.75);
+        transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease, background 0.18s ease;
+      }
+
+      .btn-open-diary:hover {
+        transform: translateY(-2px);
+        background: linear-gradient(180deg, #f4e3bf 0%, #dfc08c 100%);
+        box-shadow:
+          0 10px 24px rgba(0, 0, 0, 0.65),
+          0 0 18px rgba(255, 192, 108, 0.24);
+      }
+
+      .btn-open-diary:active {
+        transform: translateY(0);
+      }
+
+      .btn-open-diary:focus-visible {
+        outline: 2px solid #f7e4bc;
+        outline-offset: 3px;
+      }
+
+      /* =====================================================================
+         5. PARCHMENT SHEETS (PAGES 02 – 07)
+         ===================================================================== */
+      .parchment-sheet {
+        position: relative;
+        width: 100%;
+        padding: clamp(2.6rem, 5.5vw, 4.35rem) clamp(1.65rem, 5vw, 4rem);
+      }
+
+      .parchment-sheet.is-fallback {
+        background:
+          radial-gradient(circle at 20% 18%, rgba(150, 116, 76, 0.22) 0%, transparent 42%),
+          radial-gradient(circle at 82% 78%, rgba(74, 41, 25, 0.24) 0%, transparent 44%),
+          radial-gradient(ellipse at center, var(--parchment-light) 0%, var(--aged-paper) 74%, #bf9c67 100%);
+        border-radius: 5px 11px 7px 10px;
+        box-shadow:
+          inset 0 0 28px 10px rgba(42, 20, 10, 0.72),
+          inset 0 0 64px 20px rgba(74, 41, 25, 0.36),
+          0 26px 52px rgba(0, 0, 0, 0.8);
+      }
+
+      .paper-backdrop {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+        overflow: visible;
+        filter:
+          drop-shadow(0 26px 42px rgba(0, 0, 0, 0.78))
+          drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6))
+          drop-shadow(0 0 24px rgba(255, 180, 88, 0.1));
+      }
+
+      .parchment-sheen {
+        position: absolute;
+        inset: clamp(1.2rem, 3vw, 2rem);
+        z-index: 1;
+        pointer-events: none;
+        background:
+          radial-gradient(
+            circle at 84% 12%,
+            rgba(255, 232, 184, 0.24) 0%,
+            rgba(255, 204, 134, 0.08) 34%,
+            transparent 65%
+          );
+      }
+
+      .parchment-sheet--notebook .parchment-sheen {
+        background-image:
+          linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 34px,
+            rgba(130, 56, 38, 0.14) 34px,
+            rgba(130, 56, 38, 0.14) 35px,
+            transparent 35px,
+            transparent 39px,
+            rgba(130, 56, 38, 0.09) 39px,
+            rgba(130, 56, 38, 0.09) 40px,
+            transparent 40px
+          ),
+          repeating-linear-gradient(
+            to bottom,
+            transparent 0px,
+            transparent 31px,
+            rgba(104, 65, 32, 0.11) 31px,
+            rgba(104, 65, 32, 0.11) 32px
+          ),
+          radial-gradient(
+            circle at 84% 12%,
+            rgba(255, 232, 184, 0.22) 0%,
+            transparent 62%
+          );
+        mask-image: radial-gradient(ellipse 92% 94% at 50% 50%, #000 68%, transparent 100%);
+        -webkit-mask-image: radial-gradient(ellipse 92% 94% at 50% 50%, #000 68%, transparent 100%);
+      }
+
+      .floral-corner {
+        position: absolute;
+        width: clamp(54px, 9vw, 82px);
+        height: auto;
+        color: rgba(88, 52, 26, 0.56);
+        z-index: 2;
+        pointer-events: none;
+      }
+      .floral-corner--tl {
+        top: clamp(1.35rem, 3.2vw, 2.2rem);
+        left: clamp(1.35rem, 3.2vw, 2.2rem);
+      }
+      .floral-corner--tr {
+        top: clamp(1.35rem, 3.2vw, 2.2rem);
+        right: clamp(1.35rem, 3.2vw, 2.2rem);
+        transform: scaleX(-1);
+      }
+      .floral-corner--bl {
+        bottom: clamp(1.35rem, 3.2vw, 2.2rem);
+        left: clamp(1.35rem, 3.2vw, 2.2rem);
+        transform: scaleY(-1);
+      }
+      .floral-corner--br {
+        bottom: clamp(1.35rem, 3.2vw, 2.2rem);
+        right: clamp(1.35rem, 3.2vw, 2.2rem);
+        transform: scale(-1, -1);
+      }
+
+      .notebook-border-frame {
+        position: absolute;
+        inset: clamp(1.5rem, 3.5vw, 2.4rem);
+        border: 1px solid rgba(102, 65, 34, 0.22);
+        pointer-events: none;
+        z-index: 1;
+      }
+      .notebook-border-frame::after {
+        content: '';
+        position: absolute;
+        inset: 4px;
+        border: 1px dotted rgba(102, 65, 34, 0.22);
+      }
+
+      /* =====================================================================
+         6. SHARED TYPOGRAPHY & DIVIDERS INSIDE PARCHMENT PAGES
+         ===================================================================== */
+      .page-inner {
+        position: relative;
+        z-index: 3;
+        max-width: 60ch;
+        margin: 0 auto;
+      }
+
+      .page-header {
+        text-align: center;
+        margin-bottom: clamp(1.35rem, 3vw, 2.1rem);
+      }
+
+      .page-heading {
+        font-family: var(--font-heading);
+        font-size: clamp(1.85rem, 4.4vw, 2.75rem);
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--dark-ink);
+        text-shadow: 0 1px 0 rgba(255, 248, 232, 0.45);
+        text-wrap: balance;
+      }
+
+      .page-heading--hand {
+        font-family: var(--font-hand);
+        font-size: clamp(2.05rem, 5vw, 3rem);
+        font-weight: 600;
+      }
+
+      .vintage-divider {
+        width: min(100%, 280px);
+        margin: 0.75rem auto 0;
+        color: rgba(74, 41, 25, 0.68);
+      }
+
+      .vintage-divider svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .prose-body {
+        font-family: var(--font-body);
+        font-size: clamp(15.75px, 1.9vw, 17.75px);
+        line-height: 1.92;
+        color: var(--dark-ink);
+        text-shadow: 0 1px 0 rgba(255, 246, 224, 0.32);
+        animation: inkFadeIn 0.75s ease both;
+      }
+
+      @keyframes inkFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .prose-body p {
+        margin-bottom: 1.22em;
+      }
+
+      .prose-body p:last-child {
+        margin-bottom: 0;
+      }
+
+      .prose-emphasis {
+        font-weight: 500;
+        color: #2c1b11;
+      }
+
+      .emoji {
+        display: inline-block;
+        font-style: normal;
+        line-height: 1;
+        vertical-align: -0.06em;
+        font-size: 0.94em;
+      }
+
+      .page-footer {
+        margin-top: clamp(1.75rem, 4vw, 2.5rem);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+        text-align: center;
+      }
+
+      .dried-flower-svg {
+        width: 102px;
+        height: auto;
+        color: rgba(74, 41, 25, 0.78);
+      }
+
+      .signature-text {
+        font-family: var(--font-hand);
+        font-size: clamp(1.45rem, 3.2vw, 1.9rem);
+        font-weight: 600;
+        color: var(--dark-ink);
+        line-height: 1.3;
+        white-space: pre-line;
+      }
+
+      /* =====================================================================
+         7. PAGE 05 — SEVEN ANTIQUE WISH NOTES
+         ===================================================================== */
+      .wishes-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.15rem;
+        margin-top: 0.4rem;
+      }
+
+      .wish-note {
+        position: relative;
+        padding: 1.2rem 1.25rem 1.25rem;
+        background:
+          radial-gradient(circle at 88% 14%, rgba(255, 244, 214, 0.45) 0%, transparent 45%),
+          linear-gradient(155deg, #f1e2c2 0%, #e1c797 70%, #cfa970 100%);
+        border: 1px solid rgba(114, 72, 38, 0.34);
+        border-radius: 3px 8px 4px 7px;
+        box-shadow:
+          inset 0 0 16px rgba(74, 41, 25, 0.16),
+          0 6px 14px rgba(33, 21, 15, 0.18);
+        opacity: 0;
+        transform: translateY(10px) rotate(var(--note-tilt, 0deg));
+        transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .wish-note.is-revealed {
+        opacity: 1;
+        transform: translateY(0) rotate(var(--note-tilt, 0deg));
+      }
+
+      .wish-note:nth-child(1) { --note-tilt: -1.1deg; }
+      .wish-note:nth-child(2) { --note-tilt: 0.9deg; }
+      .wish-note:nth-child(3) { --note-tilt: -0.75deg; }
+      .wish-note:nth-child(4) { --note-tilt: 1.15deg; }
+      .wish-note:nth-child(5) { --note-tilt: -0.85deg; }
+      .wish-note:nth-child(6) { --note-tilt: 0.75deg; }
+      .wish-note:nth-child(7) {
+        --note-tilt: -0.45deg;
+        grid-column: 1 / -1;
+        max-width: 460px;
+        width: 100%;
+        justify-self: center;
+      }
+
+      .wish-note::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: 50%;
+        transform: translateX(-50%) rotate(-2deg);
+        width: 34px;
+        height: 11px;
+        background: rgba(196, 158, 102, 0.55);
+        border: 1px solid rgba(120, 82, 42, 0.25);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+      }
+
+      .wish-note-header {
+        display: flex;
+        align-items: baseline;
+        gap: 0.55rem;
+        padding-bottom: 0.45rem;
+        margin-bottom: 0.55rem;
+        border-bottom: 1px solid rgba(114, 72, 38, 0.22);
+      }
+
+      .wish-num {
+        font-family: var(--font-heading);
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--burnt-edge);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .wish-title {
+        font-family: var(--font-heading);
+        font-size: 1.22rem;
+        font-weight: 700;
+        color: var(--dark-ink);
+        line-height: 1.25;
+      }
+
+      .wish-text {
+        font-family: var(--font-body);
+        font-size: clamp(14.75px, 1.65vw, 16px);
+        line-height: 1.78;
+        color: var(--dark-ink);
+      }
+
+      .wishes-bottom-msg {
+        margin-top: 1.75rem;
+        text-align: center;
+        font-family: var(--font-hand);
+        font-size: clamp(1.45rem, 3vw, 1.8rem);
+        font-weight: 600;
+        color: var(--dark-ink);
+      }
+
+      /* =====================================================================
+         8. PAGE 06 — INTERACTIVE SECRET ENVELOPE & WAX SEAL
+         ===================================================================== */
+      .secret-instruction {
+        text-align: center;
+        font-family: var(--font-heading);
+        font-style: italic;
+        font-size: clamp(1.08rem, 2.2vw, 1.25rem);
+        color: #5c3a23;
+        margin-bottom: 1.5rem;
+      }
+
+      .envelope-stage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.35rem;
+      }
+
+      .envelope-trigger {
+        position: relative;
+        width: min(100%, 420px);
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        perspective: 1200px;
+        text-align: left;
+        transition: transform 0.22s ease;
+      }
+
+      .envelope-trigger:hover:not(.is-opened) {
+        transform: translateY(-3px);
+      }
+
+      .envelope-trigger:focus-visible {
+        outline: 2px solid var(--burnt-edge);
+        outline-offset: 6px;
+        border-radius: 6px;
+      }
+
+      .envelope-trigger.is-opened {
+        cursor: default;
+      }
+
+      .envelope-body {
+        position: relative;
+        width: 100%;
+        height: 230px;
+        background:
+          radial-gradient(circle at 50% 45%, #ebd7af 0%, #d4b580 78%, #b89158 100%);
+        border: 1px solid rgba(74, 41, 25, 0.45);
+        border-radius: 6px;
+        box-shadow:
+          inset 0 0 28px rgba(74, 41, 25, 0.28),
+          0 16px 32px rgba(33, 21, 15, 0.34);
+        overflow: hidden;
+      }
+
+      .envelope-pocket-left,
+      .envelope-pocket-right,
+      .envelope-pocket-bottom {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .envelope-pocket-left {
+        background: linear-gradient(135deg, rgba(168, 128, 76, 0.24) 0%, transparent 55%);
+        clip-path: polygon(0 0, 52% 52%, 0 100%);
+        border-right: 1px solid rgba(74, 41, 25, 0.16);
+      }
+
+      .envelope-pocket-right {
+        background: linear-gradient(225deg, rgba(146, 106, 58, 0.26) 0%, transparent 55%);
+        clip-path: polygon(100% 0, 48% 52%, 100% 100%);
+      }
+
+      .envelope-pocket-bottom {
+        background: linear-gradient(0deg, #caa870 0%, #dcc08e 65%, #e5cfa4 100%);
+        clip-path: polygon(0 100%, 50% 42%, 100% 100%);
+        border-top: 1px solid rgba(74, 41, 25, 0.22);
+        box-shadow: 0 -4px 12px rgba(56, 39, 28, 0.12);
+        z-index: 3;
+      }
+
+      .envelope-label {
+        position: absolute;
+        bottom: 24px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        z-index: 4;
+        font-family: var(--font-hand);
+        font-size: clamp(1.3rem, 3vw, 1.6rem);
+        font-weight: 600;
+        color: var(--dark-ink);
+        pointer-events: none;
+      }
+
+      .envelope-flap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 132px;
+        z-index: 5;
+        transform-origin: top center;
+        transform-style: preserve-3d;
+        transition: transform 0.72s cubic-bezier(0.32, 0.08, 0.24, 1);
+      }
+
+      .envelope-flap-face {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, #dfc493 0%, #cba76d 100%);
+        clip-path: polygon(0 0, 100% 0, 50% 100%);
+        border-top: 1px solid rgba(74, 41, 25, 0.35);
+        filter: drop-shadow(0 4px 6px rgba(33, 21, 15, 0.28));
+      }
+
+      .envelope-trigger.is-opened .envelope-flap {
+        transform: rotateX(176deg);
+        z-index: 1;
+      }
+
+      .envelope-peek-card {
+        position: absolute;
+        left: 10%;
+        right: 10%;
+        bottom: 14px;
+        height: 150px;
+        background: #f5e9cc;
+        border: 1px solid rgba(114, 72, 38, 0.35);
+        border-radius: 3px;
+        z-index: 2;
+        transform: translateY(18px);
+        transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.25s;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.14);
+      }
+
+      .envelope-trigger.is-opened .envelope-peek-card {
+        transform: translateY(-64px);
+      }
+
+      .envelope-seal {
+        position: absolute;
+        top: 100px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 62px;
+        height: 62px;
+        z-index: 6;
+        transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.48s ease;
+      }
+
+      .envelope-seal-crack {
+        opacity: 0;
+        transition: opacity 0.18s ease;
+      }
+
+      .envelope-trigger.is-cracking .envelope-seal-crack,
+      .envelope-trigger.is-opened .envelope-seal-crack {
+        opacity: 1;
+      }
+
+      .envelope-trigger.is-cracking .envelope-seal {
+        transform: translate(-50%, -50%) scale(1.12) rotate(-8deg);
+      }
+
+      .envelope-trigger.is-opened .envelope-seal {
+        opacity: 0;
+        transform: translate(-50%, -36%) scale(0.72) rotate(14deg);
+        pointer-events: none;
+      }
+
+      .envelope-tap-hint {
+        font-family: var(--font-heading);
+        font-size: 0.95rem;
+        letter-spacing: 0.06em;
+        color: #6b4528;
+        text-align: center;
+      }
+
+      .envelope-tap-hint.is-hidden {
+        display: none;
+      }
+
+      .secret-letter-reveal {
+        display: none;
+        width: 100%;
+        max-width: 560px;
+        padding: clamp(1.5rem, 4vw, 2.35rem);
+        background:
+          radial-gradient(circle at 86% 14%, rgba(255, 246, 224, 0.45) 0%, transparent 45%),
+          linear-gradient(160deg, #f4e7c9 0%, #e7d1a5 72%, #d5b682 100%);
+        border: 1px solid rgba(94, 56, 28, 0.35);
+        border-radius: 4px 10px 6px 8px;
+        box-shadow:
+          inset 0 0 24px rgba(74, 41, 25, 0.16),
+          0 14px 28px rgba(33, 21, 15, 0.24);
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      .secret-letter-reveal.is-visible {
+        display: block;
+        animation: letterSlideReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      @keyframes letterSlideReveal {
+        from {
+          opacity: 0;
+          transform: translateY(24px) scale(0.985);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      /* =====================================================================
+         9. PAGE 07 — CLOSING & READ AGAIN BUTTON
+         ===================================================================== */
+      .final-closing-note {
+        font-family: var(--font-heading);
+        font-style: italic;
+        font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+        color: #5a3821;
+        margin-top: 0.35rem;
+      }
+
+      .btn-read-again {
+        margin-top: 0.65rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        min-height: 44px;
+        padding: 0.65rem 1.55rem;
+        border-radius: 6px;
+        border: 1px solid rgba(74, 41, 25, 0.48);
+        background: linear-gradient(180deg, #4b3020 0%, #321f13 100%);
+        color: #f2e0ba;
+        font-family: var(--font-heading);
+        font-size: 1.08rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        cursor: pointer;
+        box-shadow: 0 6px 14px rgba(33, 21, 15, 0.28);
+        transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+      }
+
+      .btn-read-again:hover {
+        transform: translateY(-2px);
+        background: linear-gradient(180deg, #5c3b27 0%, #3e2718 100%);
+        box-shadow: 0 9px 18px rgba(33, 21, 15, 0.36);
+      }
+
+      .btn-read-again:focus-visible {
+        outline: 2px solid var(--burnt-edge);
+        outline-offset: 3px;
+      }
+
+      /* =====================================================================
+         10. VINTAGE DIARY NAVIGATION BAR & 7-STEP PROGRESS
+         ===================================================================== */
+      .diary-nav {
+        width: 100%;
+        max-width: 720px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.85rem;
+        padding: 0.85rem 1.15rem;
+        background: rgba(38, 24, 16, 0.82);
+        border: 1px solid rgba(182, 141, 76, 0.28);
+        border-radius: 10px;
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(6px);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0.55rem 1.05rem;
+        border-radius: 6px;
+        border: 1px solid rgba(216, 189, 141, 0.35);
+        background: linear-gradient(180deg, rgba(74, 47, 30, 0.88) 0%, rgba(46, 29, 19, 0.94) 100%);
+        color: #eedcb7;
+        font-family: var(--font-heading);
+        font-size: 1.02rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+      }
+
+      .nav-btn:hover:not(:disabled) {
+        transform: translateY(-1px);
+        border-color: rgba(232, 213, 174, 0.65);
+        background: linear-gradient(180deg, rgba(94, 60, 38, 0.94) 0%, rgba(58, 37, 24, 0.98) 100%);
+      }
+
+      .nav-btn:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      .nav-btn:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+
+      .nav-btn:focus-visible {
+        outline: 2px solid #eedcb7;
+        outline-offset: 2px;
+      }
+
+      .nav-status {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .page-indicator-text {
+        font-family: var(--font-heading);
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        color: #dfc493;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .progress-steps {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+      }
+
+      .progress-step {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        border: 1px solid rgba(216, 189, 141, 0.55);
+        background: transparent;
+        cursor: pointer;
+        padding: 0;
+        transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+      }
+
+      .progress-step.is-current {
+        background-color: #e8d5ae;
+        border-color: #f6e7c4;
+        transform: scale(1.28);
+        box-shadow: 0 0 8px rgba(232, 213, 174, 0.5);
+      }
+
+      .progress-step.is-visited:not(.is-current) {
+        background-color: rgba(150, 116, 76, 0.72);
+      }
+
+      .progress-step:focus-visible {
+        outline: 2px solid #f6e7c4;
+        outline-offset: 2px;
+      }
+
+      /* =====================================================================
+         11. RESPONSIVE BREAKPOINTS & REDUCED MOTION
+         ===================================================================== */
+      @media (max-width: 640px) {
+        body {
+          padding: 0.85rem 0.55rem 1.4rem;
+        }
+
+        .parchment-sheet {
+          padding: 2.25rem 1.4rem;
+        }
+
+        .wishes-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .wish-note:nth-child(7) {
+          max-width: none;
+        }
+
+        .diary-nav {
+          padding: 0.75rem 0.8rem;
+          gap: 0.65rem;
+        }
+
+        .nav-status {
+          order: -1;
+          width: 100%;
+          padding-bottom: 0.25rem;
+          border-bottom: 1px solid rgba(182, 141, 76, 0.16);
+        }
+
+        .nav-btn {
+          flex: 1 1 0;
+          font-size: 0.95rem;
+          padding: 0.55rem 0.65rem;
+        }
+
+        .envelope-body {
+          height: 205px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .candlelight-glow,
+        .diary-shell,
+        .prose-body,
+        .diary-page.turn-out-next,
+        .diary-page.turn-in-next,
+        .diary-page.turn-out-prev,
+        .diary-page.turn-in-prev,
+        .secret-letter-reveal.is-visible {
+          animation: none !important;
+        }
+
+        .leather-cover,
+        .envelope-flap,
+        .envelope-peek-card,
+        .envelope-seal,
+        .wish-note {
+          transition: none !important;
+        }
+
+        .wish-note {
+          opacity: 1 !important;
+          transform: rotate(var(--note-tilt, 0deg)) !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg
+      aria-hidden="true"
+      style="position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none;"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <radialGradient id="parchment-base" cx="48%" cy="44%" r="70%">
+          <stop offset="0%" stop-color="#ede0be" />
+          <stop offset="50%" stop-color="#e8d5ae" />
+          <stop offset="82%" stop-color="#d8bd8d" />
+          <stop offset="100%" stop-color="#b9935d" />
+        </radialGradient>
+
+        <radialGradient id="parchment-soft" cx="50%" cy="46%" r="70%">
+          <stop offset="0%" stop-color="#f2e6c8" />
+          <stop offset="55%" stop-color="#e8d5ae" />
+          <stop offset="86%" stop-color="#d8bd8d" />
+          <stop offset="100%" stop-color="#c39d69" />
+        </radialGradient>
+
+        <radialGradient id="stain-warm-a" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#96744c" stop-opacity="0.24" />
+          <stop offset="55%" stop-color="#96744c" stop-opacity="0.1" />
+          <stop offset="100%" stop-color="#96744c" stop-opacity="0" />
+        </radialGradient>
+
+        <radialGradient id="stain-warm-b" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#4a2919" stop-opacity="0.22" />
+          <stop offset="52%" stop-color="#6b4125" stop-opacity="0.09" />
+          <stop offset="100%" stop-color="#6b4125" stop-opacity="0" />
+        </radialGradient>
+
+        <filter id="paper-grain" x="0%" y="0%" width="100%" height="100%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.032"
+            numOctaves="4"
+            seed="19"
+            result="noise"
+          />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0.42
+                    0 0 0 0 0.27
+                    0 0 0 0 0.14
+                    0 0 0 0.15 0"
+            in="noise"
+          />
+        </filter>
+
+        <filter id="burn-blur-wide" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="11" />
+        </filter>
+        <filter id="burn-blur-mid" x="-15%" y="-15%" width="130%" height="130%">
+          <feGaussianBlur stdDeviation="5" />
+        </filter>
+        <filter id="burn-blur-tight" x="-10%" y="-10%" width="120%" height="120%">
+          <feGaussianBlur stdDeviation="1.8" />
+        </filter>
+      </defs>
+    </svg>
+
+    <div class="candlelight-glow" aria-hidden="true"></div>
+    <canvas id="atmosphere-canvas" aria-hidden="true"></canvas>
+
+    <main class="diary-shell">
+      <div class="diary-viewport" id="diary-viewport">
+        <!-- PAGE 01 — WELCOME -->
+        <section class="diary-page is-active" data-page="1" aria-label="Page 1: Welcome">
+          <div class="leather-book">
+            <div class="leather-cover" id="leather-cover">
+              <div class="leather-spine" aria-hidden="true"></div>
+              <div class="leather-stitch-frame" aria-hidden="true"></div>
+
+              <svg class="brass-corner brass-corner--tr" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                <path d="M4 4H36V36" stroke="currentColor" stroke-width="2" />
+                <path d="M10 4C18 4 22 8 26 14C30 18 36 22 36 30" stroke="currentColor" stroke-width="1.2" opacity="0.7" />
+                <circle cx="31" cy="9" r="2.2" fill="currentColor" />
+              </svg>
+              <svg class="brass-corner brass-corner--br" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                <path d="M4 4H36V36" stroke="currentColor" stroke-width="2" />
+                <path d="M10 4C18 4 22 8 26 14C30 18 36 22 36 30" stroke="currentColor" stroke-width="1.2" opacity="0.7" />
+                <circle cx="31" cy="9" r="2.2" fill="currentColor" />
+              </svg>
+
+              <div class="cover-inner">
+                <svg class="cover-botanical" viewBox="0 0 120 42" fill="none" aria-hidden="true">
+                  <path d="M10 22C26 22 36 16 50 20M110 22C94 22 84 16 70 20" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+                  <path d="M44 20C38 14 31 14 27 18C32 22 38 22 44 20Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.16" />
+                  <path d="M76 20C82 14 89 14 93 18C88 22 82 22 76 20Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.16" />
+                  <path d="M60 8L65 18L60 28L55 18L60 8Z" stroke="currentColor" stroke-width="1.2" fill="currentColor" fill-opacity="0.22" />
+                  <circle cx="60" cy="18" r="2.2" fill="currentColor" />
+                </svg>
+
+                <h1 class="cover-title">A Little Birthday Surprise</h1>
+                <p class="cover-subtitle" data-typewriter="Hey Tasfia! A little something made just for you.">
+                  Hey Tasfia! A little something made just for you.
+                </p>
+
+                <div class="cover-divider" aria-hidden="true">
+                  <svg viewBox="0 0 240 16" fill="none">
+                    <path d="M8 8H96M144 8H232" stroke="currentColor" stroke-width="1.1" opacity="0.65" />
+                    <path d="M120 2L126 8L120 14L114 8L120 2Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.2" />
+                  </svg>
+                </div>
+
+                <p class="cover-description">তোমার জন্য ছোট্ট একটা আয়োজন করেছি। সাধারণ কোনো Birthday Wish নয়, বরং কিছু সুন্দর কথা নিয়ে সাজানো ছোট্ট একটি ডায়েরি। এই ডায়েরির প্রতিটি পাতায় রয়েছে তোমার জন্য কিছু শুভকামনা, কিছু ভালো কথা আর ছোট ছোট চমক।
+তাহলে আর দেরি কেন?</p>
+
+                <div class="cover-seal-wrap" aria-hidden="true">
+                  <svg class="wax-seal-svg" viewBox="0 0 64 64" fill="none">
+                    <path
+                      d="M32 4C37 3 41 6 45 7C50 8 54 11 56 16C58 20 60 25 59 31C60 36 58 42 54 46C51 50 47 55 41 57C36 58 31 60 25 58C19 57 14 54 10 49C7 45 4 40 5 34C4 28 5 22 9 17C12 12 17 7 23 6C26 5 29 4 32 4Z"
+                      fill="#7d251b"
+                      stroke="#42100a"
+                      stroke-width="1.5"
+                    />
+                    <circle cx="32" cy="31" r="19" fill="#922d21" stroke="#4f140d" stroke-width="1.4" />
+                    <circle cx="32" cy="31" r="15.5" stroke="#d8b46c" stroke-width="0.9" stroke-opacity="0.45" />
+                    <path
+                      d="M24 23H40M32 23V40M28 40H36"
+                      stroke="#e8c884"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      opacity="0.72"
+                    />
+                  </svg>
+                </div>
+
+                <button type="button" class="btn-open-diary" id="open-diary-btn">
+                  <span>Open Your Diary 📖</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PAGE 02 — BIRTHDAY LETTER -->
+        <section class="diary-page" data-page="2" aria-label="Page 2: Birthday Letter">
+          <div class="parchment-sheet is-fallback" data-parchment="2" data-seed="202602">
+            <svg class="paper-backdrop" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="parchment-sheen" aria-hidden="true"></div>
+
+            <div class="page-inner">
+              <header class="page-header">
+                <h2 class="page-heading page-heading--hand" data-typewriter="Dear Tasfia!" data-suffix=" 🎂❤️">
+                  Dear Tasfia! 🎂❤️
+                </h2>
+                <div class="vintage-divider" aria-hidden="true">
+                  <svg viewBox="0 0 320 24" fill="none">
+                    <path d="M14 12H118M202 12H306" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity="0.65" />
+                    <path d="M118 12C127 12 130 5 138 6C144 6.8 143 14 137 15C132 15.6 130 11 134 9" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" />
+                    <path d="M202 12C193 12 190 5 182 6C176 6.8 177 14 183 15C188 15.6 190 11 186 9" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" />
+                    <path d="M160 5L165 12L160 19L155 12L160 5Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.16" />
+                  </svg>
+                </div>
+              </header>
+
+              <div class="prose-body">
+                <p>প্রথমেই তোমাকে জানাই জন্মদিনের অনেক অনেক শুভেচ্ছা! <span class="emoji">❤️</span></p>
+
+                <p>সাধারণ একটা Birthday Wish তো করাই হয়েছিল, কিন্তু ভাবলাম তোমার এই বিশেষ দিনটাকে একটু অন্যভাবে স্মরণীয় করে রাখা যাক। তাই এই ছোট্ট আয়োজনটা শুধুই তোমার জন্য! জীবনের নতুন একটি বছর শুরু হলো তোমার। এই বছরটা যেন তোমার জন্য অনেক আনন্দ, সাফল্য, সুন্দর মুহূর্ত আর নতুন নতুন অভিজ্ঞতা নিয়ে আসে। তোমার প্রতিটি স্বপ্ন পূরণ হোক, প্রতিটি ভালো চাওয়া বাস্তবে রূপ নিক। জীবনের ব্যস্ততা, দুশ্চিন্তা কিংবা কঠিন সময়ের মাঝেও যেন হাসিখুশি থাকার হাজারটা কারণ খুঁজে পাও। সবসময় নিজের মতো থেকো, মন খুলে হাসো, নতুন কিছু শেখো এবং নিজের স্বপ্নগুলোর পেছনে ছুটে চলো। আর হ্যাঁ, আজকের দিনটা কিন্তু তোমার! তাই কোনো চিন্তা নয়, শুধু আনন্দ, হাসি আর অনেক অনেক সুন্দর মুহূর্ত জমা করো।</p>
+
+                <p>এই ছোট্ট ওয়েবসাইটটা হয়তো খুব বড় কোনো উপহার নয়, তবে আশা করি এটা তোমার জন্মদিনের স্মৃতিতে ছোট্ট একটা সুন্দর জায়গা করে নেবে।</p>
+
+                <p class="prose-emphasis">Stay Happy, Stay Blessed &amp; Keep Smiling! <span class="emoji">🌸</span></p>
+                <p class="prose-emphasis">Once Again, Happy Birthday, Tasfia! <span class="emoji">🎀</span></p>
+                <p class="prose-emphasis">Have an amazing year ahead! <span class="emoji">❤️</span></p>
+              </div>
+
+              <footer class="page-footer">
+                <svg class="dried-flower-svg" viewBox="0 0 120 44" fill="none" aria-hidden="true">
+                  <path d="M12 24C26 24 34 19 46 21M108 24C94 24 86 19 74 21" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" opacity="0.72" />
+                  <path d="M42 21C37 15 31 15 28 19C32 22 37 22 42 21Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.14" />
+                  <path d="M78 21C83 15 89 15 92 19C88 22 83 22 78 21Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.14" />
+                  <path d="M60 7C62.5 7 64 11 60 17C56 11 57.5 7 60 7Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.18" />
+                  <path d="M60 15C60 15 65 9.5 67 13.5C68.2 16 63.5 18.2 60 18.2" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.14" />
+                  <path d="M60 15C60 15 55 9.5 53 13.5C51.8 16 56.5 18.2 60 18.2" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.14" />
+                  <path d="M60 22C64 22 68 25.5 65.2 28.5C62.8 31 60 26.5 60 22Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.14" />
+                  <path d="M60 22C56 22 52 25.5 54.8 28.5C57.2 31 60 26.5 60 22Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.14" />
+                  <circle cx="60" cy="19.5" r="2.1" fill="currentColor" opacity="0.85" />
+                </svg>
+                <p class="signature-text">With Warm Wishes <span class="emoji">❤️</span></p>
+              </footer>
+            </div>
+          </div>
+        </section>
+
+        <!-- PAGE 03 — APPRECIATION -->
+        <section class="diary-page" data-page="3" aria-label="Page 3: A Little Appreciation">
+          <div class="parchment-sheet is-fallback" data-parchment="3" data-seed="202603" data-soft="true">
+            <svg class="paper-backdrop" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="parchment-sheen" aria-hidden="true"></div>
+
+            <svg class="floral-corner floral-corner--tl" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+              <path d="M6 6C24 6 38 14 48 26M6 6C6 24 14 38 26 48" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+              <path d="M22 10C26 4 33 6 31 12C29 16 24 14 22 10Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.14" />
+              <path d="M10 22C4 26 6 33 12 31C16 29 14 24 10 22Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.14" />
+              <circle cx="14" cy="14" r="2.2" fill="currentColor" opacity="0.65" />
+            </svg>
+            <svg class="floral-corner floral-corner--tr" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+              <path d="M6 6C24 6 38 14 48 26M6 6C6 24 14 38 26 48" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+              <path d="M22 10C26 4 33 6 31 12C29 16 24 14 22 10Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.14" />
+              <path d="M10 22C4 26 6 33 12 31C16 29 14 24 10 22Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.14" />
+              <circle cx="14" cy="14" r="2.2" fill="currentColor" opacity="0.65" />
+            </svg>
+            <svg class="floral-corner floral-corner--bl" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+              <path d="M6 6C24 6 38 14 48 26M6 6C6 24 14 38 26 48" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+              <path d="M22 10C26 4 33 6 31 12C29 16 24 14 22 10Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.14" />
+              <path d="M10 22C4 26 6 33 12 31C16 29 14 24 10 22Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.14" />
+              <circle cx="14" cy="14" r="2.2" fill="currentColor" opacity="0.65" />
+            </svg>
+            <svg class="floral-corner floral-corner--br" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+              <path d="M6 6C24 6 38 14 48 26M6 6C6 24 14 38 26 48" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+              <path d="M22 10C26 4 33 6 31 12C29 16 24 14 22 10Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.14" />
+              <path d="M10 22C4 26 6 33 12 31C16 29 14 24 10 22Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.14" />
+              <circle cx="14" cy="14" r="2.2" fill="currentColor" opacity="0.65" />
+            </svg>
+
+            <div class="page-inner">
+              <header class="page-header">
+                <h2 class="page-heading page-heading--hand" data-typewriter="A Little Appreciation" data-suffix=" 🌷">
+                  A Little Appreciation 🌷
+                </h2>
+                <div class="vintage-divider" aria-hidden="true">
+                  <svg viewBox="0 0 320 24" fill="none">
+                    <path d="M18 12H128M192 12H302" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity="0.62" />
+                    <path d="M144 12C150 6 156 6 160 12C164 6 170 6 176 12C170 18 164 18 160 12C156 18 150 18 144 12Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.14" />
+                  </svg>
+                </div>
+              </header>
+
+              <div class="prose-body">
+                <p>প্রত্যেক মানুষের মধ্যেই কিছু নিজস্ব সৌন্দর্য থাকে, যা তাকে অন্যদের থেকে আলাদা করে তোলে। তোমার ক্ষেত্রেও এমন কিছু সুন্দর দিক রয়েছে, যেগুলো তোমার ব্যক্তিত্বকে আরও সুন্দর করে তুলুক, এটাই প্রত্যাশা। সবসময় নিজের ভালো দিকগুলো ধরে রেখো। নিজের আত্মবিশ্বাস, ব্যক্তিত্ব আর স্বতন্ত্রতাকে কখনো হারিয়ে ফেলো না।</p>
+
+                <p>মনে রেখো, তোমাকে সবার মতো হতে হবে না। নিজের মতো করে এগিয়ে যাওয়াটাই সবচেয়ে গুরুত্বপূর্ণ। নিজের প্রতি বিশ্বাস রেখো, নিজের মূল্য বুঝতে শেখো এবং নিজের সুন্দর দিকগুলোকে আরও বিকশিত করো।</p>
+
+                <p class="prose-emphasis">You are unique in your own way. Never forget that! <span class="emoji">❤️</span></p>
+              </div>
+
+              <footer class="page-footer">
+                <svg class="dried-flower-svg" viewBox="0 0 110 38" fill="none" aria-hidden="true">
+                  <path d="M22 22C38 22 46 18 55 18C64 18 72 22 88 22" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity="0.68" />
+                  <path d="M55 8C58 13 58 17 55 21C52 17 52 13 55 8Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.16" />
+                  <path d="M48 14C52 14 55 17 55 21C50 20 47 17 48 14Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.12" />
+                  <path d="M62 14C58 14 55 17 55 21C60 20 63 17 62 14Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.12" />
+                  <circle cx="55" cy="21" r="1.8" fill="currentColor" opacity="0.78" />
+                </svg>
+              </footer>
+            </div>
+          </div>
+        </section>
+
+        <!-- PAGE 04 — A FEW WORDS -->
+        <section class="diary-page" data-page="4" aria-label="Page 4: A Few Words for You">
+          <div class="parchment-sheet parchment-sheet--notebook is-fallback" data-parchment="4" data-seed="202604">
+            <svg class="paper-backdrop" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="parchment-sheen" aria-hidden="true"></div>
+            <div class="notebook-border-frame" aria-hidden="true"></div>
+
+            <div class="page-inner">
+              <header class="page-header">
+                <h2 class="page-heading page-heading--hand" data-typewriter="A Few Words for You..." data-suffix=" 🍂">
+                  A Few Words for You... 🍂
+                </h2>
+                <div class="vintage-divider" aria-hidden="true">
+                  <svg viewBox="0 0 320 22" fill="none">
+                    <path d="M22 11H134M186 11H298" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity="0.65" />
+                    <path d="M160 4C166 7 166 15 160 18C154 15 154 7 160 4Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.16" />
+                    <circle cx="144" cy="11" r="1.4" fill="currentColor" opacity="0.65" />
+                    <circle cx="176" cy="11" r="1.4" fill="currentColor" opacity="0.65" />
+                  </svg>
+                </div>
+              </header>
+
+              <div class="prose-body">
+                <p>জীবন সবসময় পরিকল্পনা অনুযায়ী চলে না। কখনো সুন্দর সময় আসে, আবার কখনো কিছু কঠিন সময়ের মুখোমুখি হতে হয়। তবে কখনো নিজের ওপর বিশ্বাস হারিয়ে ফেলো না। অন্যের সঙ্গে নিজের তুলনা না করে নিজের গতিতে এগিয়ে চলো। ছোট ছোট অর্জনগুলোকে মূল্য দাও, ভুল থেকে শেখো এবং নতুন কিছু করার সাহস রেখো। কখনো কোনো ব্যর্থতাকে নিজের শেষ ভেবে নিও না। কারণ প্রতিটি নতুন দিনই নতুনভাবে শুরু করার সুযোগ নিয়ে আসে। নিজের স্বপ্নগুলোকে গুরুত্ব দিও। সময়ের সঠিক ব্যবহার করো এবং নিজের ভবিষ্যৎকে সুন্দর করে গড়ে তোলার চেষ্টা করো। আর সবচেয়ে গুরুত্বপূর্ণ বিষয়, জীবনের ব্যস্ততায় নিজের হাসি আর নিজের যত্ন নিতে ভুলে যেয়ো না।</p>
+
+                <p class="prose-emphasis">Keep learning, keep growing, and keep believing in yourself! <span class="emoji">🌼</span></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PAGE 05 — WISHES & DREAMS -->
+        <section class="diary-page" data-page="5" aria-label="Page 5: Seven Little Wishes for You">
+          <div class="parchment-sheet is-fallback" data-parchment="5" data-seed="202605">
+            <svg class="paper-backdrop" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="parchment-sheen" aria-hidden="true"></div>
+
+            <div class="page-inner" style="max-width: 66ch;">
+              <header class="page-header">
+                <h2 class="page-heading" data-typewriter="Seven Little Wishes for You" data-suffix=" ✨">
+                  Seven Little Wishes for You ✨
+                </h2>
+                <div class="vintage-divider" aria-hidden="true">
+                  <svg viewBox="0 0 320 22" fill="none">
+                    <path d="M16 11H124M196 11H304" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity="0.62" />
+                    <path d="M160 4L164 11L160 18L156 11L160 4Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.18" />
+                    <circle cx="140" cy="11" r="1.5" fill="currentColor" opacity="0.6" />
+                    <circle cx="180" cy="11" r="1.5" fill="currentColor" opacity="0.6" />
+                  </svg>
+                </div>
+              </header>
+
+              <div class="wishes-grid" id="wishes-grid">
+                <article class="wish-note">
+                  <div class="wish-note-header">
+                    <span class="wish-num">01.</span>
+                    <h3 class="wish-title">Happiness</h3>
+                  </div>
+                  <p class="wish-text">তোমার প্রতিটি দিন আনন্দ, হাসি আর সুন্দর মুহূর্তে ভরে উঠুক।</p>
+                </article>
+
+                <article class="wish-note">
+                  <div class="wish-note-header">
+                    <span class="wish-num">02.</span>
+                    <h3 class="wish-title">Success in Life</h3>
+                  </div>
+                  <p class="wish-text">তোমার প্রতিটি পরিশ্রম সফলতায় রূপ নিক। জীবনের প্রতিটি ক্ষেত্রে এগিয়ে যাও।</p>
+                </article>
+
+                <article class="wish-note">
+                  <div class="wish-note-header">
+                    <span class="wish-num">03.</span>
+                    <h3 class="wish-title">Beautiful Dreams</h3>
+                  </div>
+                  <p class="wish-text">তোমার মনের সব সুন্দর স্বপ্ন একদিন বাস্তবে পূরণ হোক।</p>
+                </article>
+
+                <article class="wish-note">
+                  <div class="wish-note-header">
+                    <span class="wish-num">04.</span>
+                    <h3 class="wish-title">Confidence</h3>
+                  </div>
+                  <p class="wish-text">নিজের ওপর বিশ্বাস রেখো। কোনো বাধাই যেন তোমার এগিয়ে যাওয়ার পথ আটকে রাখতে না পারে।</p>
+                </article>
+
+                <article class="wish-note">
+                  <div class="wish-note-header">
+                    <span class="wish-num">05.</span>
+                    <h3 class="wish-title">Peace of Mind</h3>
+                  </div>
+                  <p class="wish-text">তোমার মন সবসময় শান্তিতে থাকুক। দুশ্চিন্তার চেয়ে প্রশান্তির মুহূর্ত বেশি হোক।</p>
+                </article>
+
+                <article class="wish-note">
+                  <div class="wish-note-header">
+                    <span class="wish-num">06.</span>
+                    <h3 class="wish-title">Beautiful Memories</h3>
+                  </div>
+                  <p class="wish-text">জীবনে এমন অসংখ্য সুন্দর স্মৃতি তৈরি হোক, যেগুলো মনে পড়লে মুখে হাসি ফুটে ওঠে।</p>
+                </article>
+
+                <article class="wish-note">
+                  <div class="wish-note-header">
+                    <span class="wish-num">07.</span>
+                    <h3 class="wish-title">Wonderful New Beginnings</h3>
+                  </div>
+                  <p class="wish-text">তোমার জীবনের প্রতিটি নতুন অধ্যায় আরও সুন্দর সম্ভাবনা, আনন্দ ও সাফল্য নিয়ে আসুক।</p>
+                </article>
+              </div>
+
+              <p class="wishes-bottom-msg">A little wish for a wonderful year ahead! <span class="emoji">❤️</span></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- PAGE 06 — SECRET LETTER -->
+        <section class="diary-page" data-page="6" aria-label="Page 6: One Last Little Message">
+          <div class="parchment-sheet is-fallback" data-parchment="6" data-seed="202606">
+            <svg class="paper-backdrop" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="parchment-sheen" aria-hidden="true"></div>
+
+            <div class="page-inner">
+              <header class="page-header">
+                <h2 class="page-heading" data-typewriter="One Last Little Message..." data-suffix=" 💌">
+                  One Last Little Message... 💌
+                </h2>
+                <div class="vintage-divider" aria-hidden="true">
+                  <svg viewBox="0 0 320 22" fill="none">
+                    <path d="M18 11H128M192 11H302" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity="0.62" />
+                    <path d="M160 4L165 11L160 18L155 11L160 4Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.16" />
+                  </svg>
+                </div>
+              </header>
+
+              <p class="secret-instruction">There is one more little message for you...</p>
+
+              <div class="envelope-stage">
+                <button
+                  type="button"
+                  class="envelope-trigger"
+                  id="secret-envelope"
+                  aria-expanded="false"
+                  aria-controls="secret-letter-reveal"
+                >
+                  <div class="envelope-body">
+                    <div class="envelope-flap">
+                      <div class="envelope-flap-face"></div>
+                    </div>
+
+                    <div class="envelope-peek-card" aria-hidden="true"></div>
+                    <div class="envelope-pocket-left" aria-hidden="true"></div>
+                    <div class="envelope-pocket-right" aria-hidden="true"></div>
+                    <div class="envelope-pocket-bottom" aria-hidden="true"></div>
+
+                    <span class="envelope-label">A Little Secret Message</span>
+
+                    <svg class="envelope-seal" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                      <path
+                        d="M32 4C37 3 41 6 45 7C50 8 54 11 56 16C58 20 60 25 59 31C60 36 58 42 54 46C51 50 47 55 41 57C36 58 31 60 25 58C19 57 14 54 10 49C7 45 4 40 5 34C4 28 5 22 9 17C12 12 17 7 23 6C26 5 29 4 32 4Z"
+                        fill="#7d251b"
+                        stroke="#42100a"
+                        stroke-width="1.5"
+                      />
+                      <circle cx="32" cy="31" r="19" fill="#922d21" stroke="#4f140d" stroke-width="1.4" />
+                      <circle cx="32" cy="31" r="15" stroke="#e8c884" stroke-width="0.9" stroke-opacity="0.45" />
+                      <path
+                        d="M32 21C34 25 38 27 38 31C38 35 34 38 32 41C30 38 26 35 26 31C26 27 30 25 32 21Z"
+                        stroke="#e8c884"
+                        stroke-width="1.35"
+                        fill="#e8c884"
+                        fill-opacity="0.22"
+                      />
+                      <path
+                        class="envelope-seal-crack"
+                        d="M16 14L29 29L22 44M44 16L31 31L46 48M14 33L49 28"
+                        stroke="#240805"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </div>
+                </button>
+
+                <p class="envelope-tap-hint" id="envelope-tap-hint">Tap the envelope to break the wax seal</p>
+
+                <div class="secret-letter-reveal" id="secret-letter-reveal">
+                  <div class="prose-body">
+                    <p class="prose-emphasis">Hey Tasfia!</p>
+
+                    <p>আশা করি এই ছোট্ট আয়োজনটা তোমার ভালো লেগেছে। খুব বড় কিছু নয়, শুধু তোমার বিশেষ দিনটাকে একটু অন্যরকমভাবে উদযাপন করার ছোট্ট একটা চেষ্টা।</p>
+
+                    <p>জীবনের প্রতিটি নতুন অধ্যায় সুন্দর হোক। অনেক ভালো থেকো, নিজের যত্ন নিও এবং সবসময় হাসিখুশি থেকো। এই ছোট্ট সারপ্রাইজটা তোমার মুখে একটুখানি হাসি এনে দিতে পারলেই আয়োজনটা সার্থক।</p>
+
+                    <p class="prose-emphasis">Take care and keep smiling! <span class="emoji">🌸</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PAGE 07 — FINAL PAGE -->
+        <section class="diary-page" data-page="7" aria-label="Page 7: The Last Page">
+          <div class="parchment-sheet is-fallback" data-parchment="7" data-seed="202607">
+            <svg class="paper-backdrop" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="parchment-sheen" aria-hidden="true"></div>
+
+            <div class="page-inner">
+              <header class="page-header">
+                <h2 class="page-heading" data-typewriter="The Last Page..." data-suffix=" 🎂">
+                  The Last Page... 🎂
+                </h2>
+                <div class="vintage-divider" aria-hidden="true">
+                  <svg viewBox="0 0 320 24" fill="none">
+                    <path d="M14 12H118M202 12H306" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity="0.65" />
+                    <path d="M118 12C127 12 130 5 138 6C144 6.8 143 14 137 15C132 15.6 130 11 134 9" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" />
+                    <path d="M202 12C193 12 190 5 182 6C176 6.8 177 14 183 15C188 15.6 190 11 186 9" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" />
+                    <path d="M160 5L165 12L160 19L155 12L160 5Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.18" />
+                  </svg>
+                </div>
+              </header>
+
+              <div class="prose-body">
+                <p>প্রতিটি সুন্দর গল্পের মতো এই ছোট্ট ডায়েরিরও আজ শেষ পাতা।</p>
+
+                <p>তবে তোমার জন্য শুভকামনা কখনো শেষ হওয়ার নয়।</p>
+
+                <p>আশা করি আজকের দিনটি অনেক আনন্দে কাটছে। তোমার জীবনের নতুন বছরটি হোক আগের সব বছরের চেয়ে আরও সুন্দর, আরও আনন্দময় এবং সাফল্যে পরিপূর্ণ।</p>
+
+                <p>জীবনে অনেক দূর এগিয়ে যাও। নিজের স্বপ্নগুলো পূরণ করো এবং প্রতিটি মুহূর্তকে সুন্দরভাবে উপভোগ করো। আর হ্যাঁ, এই ছোট্ট ওয়েবসাইটটা যদি কখনো আবার খোলো, আশা করি আজকের দিনটার কথা মনে পড়ে তোমার মুখে একটুখানি হাসি ফুটে উঠবে।</p>
+
+                <p class="prose-emphasis">
+                  Once Again, Happy Birthday, Tasfia! <span class="emoji">🎀❤️</span><br />
+                  Stay Blessed. Stay Happy. Keep Smiling!
+                </p>
+              </div>
+
+              <footer class="page-footer">
+                <svg class="dried-flower-svg" viewBox="0 0 120 44" fill="none" aria-hidden="true">
+                  <path d="M12 24C26 24 34 19 46 21M108 24C94 24 86 19 74 21" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" opacity="0.72" />
+                  <path d="M42 21C37 15 31 15 28 19C32 22 37 22 42 21Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.14" />
+                  <path d="M78 21C83 15 89 15 92 19C88 22 83 22 78 21Z" stroke="currentColor" stroke-width="1.1" fill="currentColor" fill-opacity="0.14" />
+                  <path d="M60 7C62.5 7 64 11 60 17C56 11 57.5 7 60 7Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.18" />
+                  <path d="M60 15C60 15 65 9.5 67 13.5C68.2 16 63.5 18.2 60 18.2" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.14" />
+                  <path d="M60 15C60 15 55 9.5 53 13.5C51.8 16 56.5 18.2 60 18.2" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.14" />
+                  <path d="M60 22C64 22 68 25.5 65.2 28.5C62.8 31 60 26.5 60 22Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.14" />
+                  <path d="M60 22C56 22 52 25.5 54.8 28.5C57.2 31 60 26.5 60 22Z" stroke="currentColor" stroke-width="1.15" fill="currentColor" fill-opacity="0.14" />
+                  <circle cx="60" cy="19.5" r="2.1" fill="currentColor" opacity="0.85" />
+                </svg>
+
+                <p class="signature-text">With Warm Wishes,
+Fardin <span class="emoji">❤️</span></p>
+
+                <p class="final-closing-note">End of this little diary. But the wishes continue...</p>
+
+                <button type="button" class="btn-read-again" id="read-again-btn">
+                  <span>Read Again ↻</span>
+                </button>
+              </footer>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- VINTAGE DIARY NAVIGATION SYSTEM -->
+      <nav class="diary-nav" aria-label="Diary page navigation">
+        <button type="button" class="nav-btn" id="prev-page-btn" disabled>
+          ← Previous Page
+        </button>
+
+        <div class="nav-status">
+          <span class="page-indicator-text" id="page-indicator" aria-live="polite">Page 1 of 7</span>
+          <div class="progress-steps" id="progress-steps" aria-label="Page progress">
+            <button type="button" class="progress-step is-current" data-goto="1" aria-label="Go to Page 1"></button>
+            <button type="button" class="progress-step" data-goto="2" aria-label="Go to Page 2"></button>
+            <button type="button" class="progress-step" data-goto="3" aria-label="Go to Page 3"></button>
+            <button type="button" class="progress-step" data-goto="4" aria-label="Go to Page 4"></button>
+            <button type="button" class="progress-step" data-goto="5" aria-label="Go to Page 5"></button>
+            <button type="button" class="progress-step" data-goto="6" aria-label="Go to Page 6"></button>
+            <button type="button" class="progress-step" data-goto="7" aria-label="Go to Page 7"></button>
+          </div>
+        </div>
+
+        <button type="button" class="nav-btn" id="next-page-btn">
+          Next Page →
+        </button>
+      </nav>
+    </main>
+
+    <script>
+      (function () {
+        'use strict';
+
+        const prefersReducedMotion =
+          window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        function createSeededRandom(seed) {
+          let state = seed >>> 0;
+          return function () {
+            state = (state + 0x6d2b79f5) >>> 0;
+            let t = Math.imul(state ^ (state >>> 15), 1 | state);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+        }
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const parchmentSheets = Array.prototype.slice.call(
+          document.querySelectorAll('[data-parchment]')
+        );
+        const sheetDimensions = new WeakMap();
+
+        function renderParchmentSheet(sheetEl) {
+          const width = Math.round(sheetEl.offsetWidth);
+          const height = Math.round(sheetEl.offsetHeight);
+          if (!width || !height) return;
+
+          const prev = sheetDimensions.get(sheetEl);
+          if (prev && Math.abs(prev.w - width) <= 1 && Math.abs(prev.h - height) <= 2) {
+            return;
+          }
+          sheetDimensions.set(sheetEl, { w: width, h: height });
+
+          const pageId = sheetEl.getAttribute('data-parchment');
+          const seed = parseInt(sheetEl.getAttribute('data-seed'), 10) || 202611;
+          const isSoft = sheetEl.getAttribute('data-soft') === 'true';
+          const svg = sheetEl.querySelector('.paper-backdrop');
+          if (!svg) return;
+
+          sheetEl.classList.remove('is-fallback');
+          svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+
+          const rand = createSeededRandom(seed);
+          const baseInset = Math.min(12, Math.max(7, width * 0.016));
+          const step = 13;
+          const points = [];
+
+          function edgeOffset(t, edgeLength, phase) {
+            const wave =
+              Math.sin(t * Math.PI * 3 + phase) * 3.1 +
+              Math.sin(t * Math.PI * 7 + phase * 1.6) * 1.9;
+            const bite =
+              Math.pow(Math.max(0, Math.sin(t * Math.PI * 5 + phase * 2.1)), 6) * 5.8;
+            const jitter = (rand() - 0.5) * 3.6;
+            const cornerDist = Math.min(t * edgeLength, (1 - t) * edgeLength);
+            const cornerChar = cornerDist < 22 ? (22 - cornerDist) * 0.24 : 0;
+            return baseInset + wave + bite + jitter + cornerChar;
+          }
+
+          const topSteps = Math.max(12, Math.floor(width / step));
+          for (let i = 0; i <= topSteps; i++) {
+            const t = i / topSteps;
+            points.push([baseInset + t * (width - baseInset * 2), edgeOffset(t, width, 0.7)]);
+          }
+
+          const rightSteps = Math.max(14, Math.floor(height / step));
+          for (let i = 1; i <= rightSteps; i++) {
+            const t = i / rightSteps;
+            points.push([width - edgeOffset(t, height, 2.3), baseInset + t * (height - baseInset * 2)]);
+          }
+
+          const bottomSteps = Math.max(12, Math.floor(width / step));
+          for (let i = 1; i <= bottomSteps; i++) {
+            const t = i / bottomSteps;
+            points.push([width - baseInset - t * (width - baseInset * 2), height - edgeOffset(t, width, 3.9)]);
+          }
+
+          const leftSteps = Math.max(14, Math.floor(height / step));
+          for (let i = 1; i < leftSteps; i++) {
+            const t = i / leftSteps;
+            points.push([edgeOffset(t, height, 5.4), height - baseInset - t * (height - baseInset * 2)]);
+          }
+
+          let d = '';
+          const total = points.length;
+          for (let i = 0; i < total; i++) {
+            const curr = points[i];
+            const next = points[(i + 1) % total];
+            const midX = (curr[0] + next[0]) * 0.5;
+            const midY = (curr[1] + next[1]) * 0.5;
+            if (i === 0) {
+              const prevPt = points[total - 1];
+              d +=
+                'M ' +
+                ((prevPt[0] + curr[0]) * 0.5).toFixed(1) +
+                ' ' +
+                ((prevPt[1] + curr[1]) * 0.5).toFixed(1) +
+                ' ';
+            }
+            d +=
+              'Q ' +
+              curr[0].toFixed(1) +
+              ' ' +
+              curr[1].toFixed(1) +
+              ' ' +
+              midX.toFixed(1) +
+              ' ' +
+              midY.toFixed(1) +
+              ' ';
+          }
+          d += 'Z';
+
+          const pathId = 'burnt-path-' + pageId;
+          const clipId = 'burnt-clip-' + pageId;
+
+          svg.innerHTML = '';
+
+          const defs = document.createElementNS(svgNS, 'defs');
+          const shapePath = document.createElementNS(svgNS, 'path');
+          shapePath.setAttribute('id', pathId);
+          shapePath.setAttribute('d', d);
+
+          const clipPath = document.createElementNS(svgNS, 'clipPath');
+          clipPath.setAttribute('id', clipId);
+          const clipUse = document.createElementNS(svgNS, 'use');
+          clipUse.setAttribute('href', '#' + pathId);
+          clipPath.appendChild(clipUse);
+
+          defs.appendChild(shapePath);
+          defs.appendChild(clipPath);
+          svg.appendChild(defs);
+
+          const layerGroup = document.createElementNS(svgNS, 'g');
+          layerGroup.setAttribute('clip-path', 'url(#' + clipId + ')');
+
+          const baseRect = document.createElementNS(svgNS, 'rect');
+          baseRect.setAttribute('x', '0');
+          baseRect.setAttribute('y', '0');
+          baseRect.setAttribute('width', String(width));
+          baseRect.setAttribute('height', String(height));
+          baseRect.setAttribute('fill', isSoft ? 'url(#parchment-soft)' : 'url(#parchment-base)');
+          layerGroup.appendChild(baseRect);
+
+          const grainRect = document.createElementNS(svgNS, 'rect');
+          grainRect.setAttribute('x', '0');
+          grainRect.setAttribute('y', '0');
+          grainRect.setAttribute('width', String(width));
+          grainRect.setAttribute('height', String(height));
+          grainRect.setAttribute('filter', 'url(#paper-grain)');
+          grainRect.setAttribute('opacity', '0.9');
+          layerGroup.appendChild(grainRect);
+
+          const stains = [
+            { cx: width * (0.14 + rand() * 0.1), cy: height * (0.12 + rand() * 0.08), rx: width * 0.2, ry: height * 0.11, fill: 'url(#stain-warm-a)' },
+            { cx: width * (0.78 + rand() * 0.1), cy: height * (0.75 + rand() * 0.12), rx: width * 0.22, ry: height * 0.13, fill: 'url(#stain-warm-b)' },
+            { cx: width * 0.82, cy: height * 0.18, rx: width * 0.13, ry: height * 0.08, fill: 'url(#stain-warm-a)' }
+          ];
+          stains.forEach(function (s) {
+            const el = document.createElementNS(svgNS, 'ellipse');
+            el.setAttribute('cx', s.cx.toFixed(1));
+            el.setAttribute('cy', s.cy.toFixed(1));
+            el.setAttribute('rx', s.rx.toFixed(1));
+            el.setAttribute('ry', s.ry.toFixed(1));
+            el.setAttribute('fill', s.fill);
+            layerGroup.appendChild(el);
+          });
+
+          const foldY = height * 0.5;
+          const crease = document.createElementNS(svgNS, 'path');
+          crease.setAttribute(
+            'd',
+            'M 0 ' + foldY.toFixed(1) + ' Q ' + (width * 0.5).toFixed(1) + ' ' + (foldY + 3.5).toFixed(1) + ' ' + width + ' ' + (foldY - 2).toFixed(1)
+          );
+          crease.setAttribute('stroke', '#4a2919');
+          crease.setAttribute('stroke-width', '2');
+          crease.setAttribute('fill', 'none');
+          crease.setAttribute('opacity', '0.08');
+          layerGroup.appendChild(crease);
+
+          for (let i = 0; i < 36; i++) {
+            const dot = document.createElementNS(svgNS, 'circle');
+            dot.setAttribute('cx', ((0.05 + rand() * 0.9) * width).toFixed(1));
+            dot.setAttribute('cy', ((0.05 + rand() * 0.9) * height).toFixed(1));
+            dot.setAttribute('r', (0.7 + rand() * 1.9).toFixed(1));
+            dot.setAttribute('fill', rand() > 0.45 ? '#96744c' : '#4a2919');
+            dot.setAttribute('opacity', (0.08 + rand() * 0.13).toFixed(2));
+            layerGroup.appendChild(dot);
+          }
+
+          const burnStrokes = [
+            { stroke: '#7a4522', width: 34, opacity: 0.44, filter: 'url(#burn-blur-wide)' },
+            { stroke: '#4a2919', width: 18, opacity: 0.7, filter: 'url(#burn-blur-mid)' },
+            { stroke: '#231008', width: 8.5, opacity: 0.92, filter: 'url(#burn-blur-tight)' },
+            { stroke: '#130703', width: 3, opacity: 0.96, filter: null }
+          ];
+          burnStrokes.forEach(function (cfg) {
+            const u = document.createElementNS(svgNS, 'use');
+            u.setAttribute('href', '#' + pathId);
+            u.setAttribute('fill', 'none');
+            u.setAttribute('stroke', cfg.stroke);
+            u.setAttribute('stroke-width', String(cfg.width));
+            u.setAttribute('stroke-linejoin', 'round');
+            u.setAttribute('opacity', String(cfg.opacity));
+            if (cfg.filter) u.setAttribute('filter', cfg.filter);
+            layerGroup.appendChild(u);
+          });
+
+          svg.appendChild(layerGroup);
+        }
+
+        function refreshActiveParchments() {
+          parchmentSheets.forEach(function (sheet) {
+            if (sheet.offsetWidth > 0 && sheet.offsetHeight > 0) {
+              renderParchmentSheet(sheet);
+            }
+          });
+        }
+
+        if (typeof ResizeObserver !== 'undefined') {
+          const ro = new ResizeObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.target && entry.target.offsetWidth > 0) {
+                renderParchmentSheet(entry.target);
+              }
+            });
+          });
+          parchmentSheets.forEach(function (sheet) {
+            ro.observe(sheet);
+          });
+        } else {
+          window.addEventListener('resize', refreshActiveParchments);
+        }
+
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(refreshActiveParchments);
+        }
+
+        let activeTypeTimer = null;
+
+        function runTypewriterForPage(pageEl) {
+          if (activeTypeTimer) {
+            clearInterval(activeTypeTimer);
+            activeTypeTimer = null;
+          }
+
+          if (prefersReducedMotion) return;
+
+          const target = pageEl.querySelector('[data-typewriter]');
+          if (!target) return;
+
+          const fullText = target.getAttribute('data-typewriter') || '';
+          const suffix = target.getAttribute('data-suffix') || '';
+          if (!fullText) return;
+
+          let idx = 0;
+          target.textContent = '';
+
+          activeTypeTimer = setInterval(function () {
+            idx += 1;
+            target.textContent = fullText.slice(0, idx) + (idx >= fullText.length ? suffix : '');
+            if (idx >= fullText.length) {
+              clearInterval(activeTypeTimer);
+              activeTypeTimer = null;
+            }
+          }, 26);
+        }
+
+        const TOTAL_PAGES = 7;
+        let currentPage = 1;
+        let isTransitioning = false;
+        const visitedPages = new Set([1]);
+
+        const pages = Array.prototype.slice.call(document.querySelectorAll('.diary-page'));
+        const prevBtn = document.getElementById('prev-page-btn');
+        const nextBtn = document.getElementById('next-page-btn');
+        const indicatorEl = document.getElementById('page-indicator');
+        const progressButtons = Array.prototype.slice.call(
+          document.querySelectorAll('.progress-step')
+        );
+        const openDiaryBtn = document.getElementById('open-diary-btn');
+        const leatherCover = document.getElementById('leather-cover');
+        const readAgainBtn = document.getElementById('read-again-btn');
+
+        function getPageEl(pageNum) {
+          return pages.find(function (p) {
+            return parseInt(p.getAttribute('data-page'), 10) === pageNum;
+          });
+        }
+
+        function updateNavigationUI() {
+          indicatorEl.textContent = 'Page ' + currentPage + ' of ' + TOTAL_PAGES;
+          prevBtn.disabled = currentPage <= 1;
+          nextBtn.disabled = currentPage >= TOTAL_PAGES;
+
+          progressButtons.forEach(function (btn) {
+            const p = parseInt(btn.getAttribute('data-goto'), 10);
+            btn.classList.toggle('is-current', p === currentPage);
+            btn.classList.toggle('is-visited', visitedPages.has(p));
+          });
+        }
+
+        function revealPage5Notes() {
+          const notes = Array.prototype.slice.call(document.querySelectorAll('#wishes-grid .wish-note'));
+          if (prefersReducedMotion) {
+            notes.forEach(function (n) {
+              n.classList.add('is-revealed');
+            });
+            return;
+          }
+
+          notes.forEach(function (n) {
+            n.classList.remove('is-revealed');
+          });
+          notes.forEach(function (note, idx) {
+            setTimeout(function () {
+              note.classList.add('is-revealed');
+            }, 90 + idx * 95);
+          });
+        }
+
+        function navigateToPage(targetPage, options) {
+          const opts = options || {};
+          if (isTransitioning || targetPage === currentPage) return;
+          if (targetPage < 1 || targetPage > TOTAL_PAGES) return;
+
+          const outgoing = getPageEl(currentPage);
+          const incoming = getPageEl(targetPage);
+          if (!outgoing || !incoming) return;
+
+          const isForward = targetPage > currentPage;
+          isTransitioning = true;
+
+          pages.forEach(function (p) {
+            p.classList.remove('turn-out-next', 'turn-in-next', 'turn-out-prev', 'turn-in-prev');
+          });
+
+          if (targetPage === 1 && leatherCover) {
+            leatherCover.classList.remove('is-opening');
+          }
+
+          currentPage = targetPage;
+          visitedPages.add(currentPage);
+          updateNavigationUI();
+
+          if (prefersReducedMotion || opts.instant) {
+            outgoing.classList.remove('is-active');
+            incoming.classList.add('is-active');
+            isTransitioning = false;
+            refreshActiveParchments();
+            if (currentPage === 5) revealPage5Notes();
+            window.scrollTo({ top: 0, behavior: 'auto' });
+            return;
+          }
+
+          outgoing.classList.remove('is-active');
+          outgoing.classList.add(isForward ? 'turn-out-next' : 'turn-out-prev');
+
+          incoming.classList.add('is-active', isForward ? 'turn-in-next' : 'turn-in-prev');
+          refreshActiveParchments();
+          runTypewriterForPage(incoming);
+
+          if (currentPage === 5) {
+            revealPage5Notes();
+          }
+
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+
+          setTimeout(function () {
+            outgoing.classList.remove('turn-out-next', 'turn-out-prev');
+            incoming.classList.remove('turn-in-next', 'turn-in-prev');
+            refreshActiveParchments();
+            isTransitioning = false;
+          }, 560);
+        }
+
+        if (openDiaryBtn && leatherCover) {
+          openDiaryBtn.addEventListener('click', function () {
+            if (isTransitioning || currentPage !== 1) return;
+
+            if (prefersReducedMotion) {
+              navigateToPage(2, { instant: true });
+              return;
+            }
+
+            isTransitioning = true;
+            leatherCover.classList.add('is-opening');
+
+            setTimeout(function () {
+              isTransitioning = false;
+              navigateToPage(2);
+            }, 520);
+          });
+        }
+
+        if (readAgainBtn) {
+          readAgainBtn.addEventListener('click', function () {
+            navigateToPage(1);
+          });
+        }
+
+        prevBtn.addEventListener('click', function () {
+          navigateToPage(currentPage - 1);
+        });
+
+        nextBtn.addEventListener('click', function () {
+          navigateToPage(currentPage + 1);
+        });
+
+        progressButtons.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            const target = parseInt(btn.getAttribute('data-goto'), 10);
+            navigateToPage(target);
+          });
+        });
+
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowRight' && currentPage < TOTAL_PAGES) {
+            navigateToPage(currentPage + 1);
+          } else if (e.key === 'ArrowLeft' && currentPage > 1) {
+            navigateToPage(currentPage - 1);
+          }
+        });
+
+        let envelopeOpened = false;
+        const envelopeBtn = document.getElementById('secret-envelope');
+        const secretReveal = document.getElementById('secret-letter-reveal');
+        const tapHint = document.getElementById('envelope-tap-hint');
+
+        function openSecretEnvelope() {
+          if (envelopeOpened) return;
+          envelopeOpened = true;
+
+          if (prefersReducedMotion) {
+            envelopeBtn.classList.add('is-opened');
+            envelopeBtn.setAttribute('aria-expanded', 'true');
+            if (tapHint) tapHint.classList.add('is-hidden');
+            secretReveal.classList.add('is-visible');
+            refreshActiveParchments();
+            return;
+          }
+
+          envelopeBtn.classList.add('is-cracking');
+
+          setTimeout(function () {
+            envelopeBtn.classList.remove('is-cracking');
+            envelopeBtn.classList.add('is-opened');
+            envelopeBtn.setAttribute('aria-expanded', 'true');
+            if (tapHint) tapHint.classList.add('is-hidden');
+          }, 260);
+
+          setTimeout(function () {
+            secretReveal.classList.add('is-visible');
+            refreshActiveParchments();
+          }, 680);
+        }
+
+        if (envelopeBtn) {
+          envelopeBtn.addEventListener('click', openSecretEnvelope);
+        }
+
+        const canvas = document.getElementById('atmosphere-canvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+
+        if (ctx && !prefersReducedMotion) {
+          let cw = 0;
+          let ch = 0;
+          let dpr = 1;
+          const dustMotes = [];
+          const petals = [];
+
+          function resizeCanvas() {
+            dpr = Math.min(window.devicePixelRatio || 1, 2);
+            cw = window.innerWidth;
+            ch = window.innerHeight;
+            canvas.width = Math.floor(cw * dpr);
+            canvas.height = Math.floor(ch * dpr);
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          }
+
+          function initParticles() {
+            dustMotes.length = 0;
+            petals.length = 0;
+
+            const dustCount = cw < 640 ? 20 : 34;
+            for (let i = 0; i < dustCount; i++) {
+              dustMotes.push({
+                x: Math.random() * cw,
+                y: Math.random() * ch,
+                r: 0.65 + Math.random() * 1.4,
+                vx: (Math.random() - 0.5) * 0.16,
+                vy: -0.08 - Math.random() * 0.22,
+                phase: Math.random() * Math.PI * 2,
+                alpha: 0.16 + Math.random() * 0.32
+              });
+            }
+
+            const petalCount = cw < 640 ? 6 : 10;
+            for (let i = 0; i < petalCount; i++) {
+              petals.push({
+                x: Math.random() * cw,
+                y: Math.random() * ch,
+                size: 4.5 + Math.random() * 4.2,
+                vy: 0.25 + Math.random() * 0.3,
+                vx: -0.1 + Math.random() * 0.2,
+                swayPhase: Math.random() * Math.PI * 2,
+                swayAmp: 0.25 + Math.random() * 0.32,
+                angle: Math.random() * Math.PI * 2,
+                spin: (Math.random() - 0.5) * 0.012,
+                alpha: 0.14 + Math.random() * 0.16,
+                tint: i % 2 === 0 ? '224, 174, 146' : '232, 213, 174'
+              });
+            }
+          }
+
+          resizeCanvas();
+          initParticles();
+          window.addEventListener('resize', function () {
+            resizeCanvas();
+            initParticles();
+          });
+
+          let lastTime = performance.now();
+
+          function renderFrame(now) {
+            const dt = Math.min((now - lastTime) / 16.67, 2.5);
+            lastTime = now;
+            ctx.clearRect(0, 0, cw, ch);
+
+            for (let i = 0; i < dustMotes.length; i++) {
+              const m = dustMotes[i];
+              m.x += m.vx * dt + Math.sin(now * 0.0007 + m.phase) * 0.08 * dt;
+              m.y += m.vy * dt;
+
+              if (m.y < -8) {
+                m.y = ch + 8;
+                m.x = Math.random() * cw;
+              }
+              if (m.x < -8) m.x = cw + 8;
+              if (m.x > cw + 8) m.x = -8;
+
+              const shimmer = 0.6 + 0.4 * Math.sin(now * 0.0018 + m.phase);
+              ctx.beginPath();
+              ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+              ctx.fillStyle = 'rgba(255, 216, 152, ' + (m.alpha * shimmer).toFixed(3) + ')';
+              ctx.fill();
+            }
+
+            for (let i = 0; i < petals.length; i++) {
+              const p = petals[i];
+              p.y += p.vy * dt;
+              p.x += (p.vx + Math.sin(now * 0.001 + p.swayPhase) * p.swayAmp) * dt;
+              p.angle += p.spin * dt;
+
+              if (p.y > ch + 20) {
+                p.y = -18;
+                p.x = Math.random() * cw;
+              }
+              if (p.x < -20) p.x = cw + 20;
+              if (p.x > cw + 20) p.x = -20;
+
+              ctx.save();
+              ctx.translate(p.x, p.y);
+              ctx.rotate(p.angle);
+              ctx.beginPath();
+              ctx.moveTo(0, -p.size);
+              ctx.bezierCurveTo(
+                p.size * 0.75,
+                -p.size * 0.55,
+                p.size * 0.65,
+                p.size * 0.6,
+                0,
+                p.size * 0.9
+              );
+              ctx.bezierCurveTo(
+                -p.size * 0.65,
+                p.size * 0.6,
+                -p.size * 0.75,
+                -p.size * 0.55,
+                0,
+                -p.size
+              );
+              ctx.fillStyle = 'rgba(' + p.tint + ', ' + p.alpha.toFixed(3) + ')';
+              ctx.fill();
+              ctx.restore();
+            }
+
+            requestAnimationFrame(renderFrame);
+          }
+
+          requestAnimationFrame(renderFrame);
+        }
+
+        updateNavigationUI();
+        runTypewriterForPage(getPageEl(1));
+      })();
+    </script>
+  </body>
+</html>
